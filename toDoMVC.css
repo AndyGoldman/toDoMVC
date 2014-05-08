@@ -111,9 +111,9 @@ ul.toDoList li{
 .footer{
 	display: block;
 	margin: 0 auto;
-	width: 40%;
+	width: 50%;
 	position: relative;
-	left: 5%;
+	left: 0%;
 	background-color: rgba(255,0,0,0.6);
 }
 
