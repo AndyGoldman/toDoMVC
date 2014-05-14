@@ -16,6 +16,7 @@ $(function () {
 		//setListeners after the list has been built.
 		populateList();
 		setListeners();
+		updateTodosLeft();
 	}
 	function setListeners() {
 		//console.log('running');
@@ -62,7 +63,7 @@ $(function () {
 		$('#todo-list li:last-child').attr('data-id',id);
 		if (status) {
 			$('#todo-list li:last-child').addClass('completed');
-			$('#todo-list li:last-child .toggle').attr('checked', true)
+			$('#todo-list li:last-child .toggle').attr('checked', true);
 		}
 		$('#new-todo').val('');
 		addListItemListener(id);
@@ -93,7 +94,7 @@ $(function () {
 			'completed': false
 		};
 	
-		var todos = [];
+		todos = [];
 			if (localStorage.getItem('todos') === null) {
 				todos = [];
 			} else {
@@ -107,6 +108,7 @@ $(function () {
 	
 		//localStorage.setItem('Todos', JSON.stringify(todoEntry));
 	
+		updateTodosLeft();
 		insertEntry(entry,id);
 	}
 	
@@ -133,8 +135,9 @@ $(function () {
 						updateCompleted(id, false)
 					} else {
 						item.addClass('completed');
-						updateCompleted(id, true)
+						updateCompleted(id, true);
 					}
+					updateTodosLeft();
 				}
 			});
 		}
@@ -149,7 +152,7 @@ $(function () {
 			var id = $('.editing').attr('data-id');
 			for(i=0; i <= todos.length - 1; i++) {
 				if (todos[i]['id'] === id) {
-					todos[i]['name'] = $('.editing .edit').val();
+					todos[i]['entry'] = $('.editing .edit').val();
 				}
 			}
 			localStorage.setItem('todos'.JSON.stringify(todos));
@@ -162,7 +165,7 @@ $(function () {
 				if(todos[i]['id'] === id) {
 					 todos[i]['completed'] = status;
 					 }
-					 localStorage.setItem('todos'.JSON.stringify(todos));
+					 localStorage.setItem('todos',JSON.stringify(todos));
 			}
 		}
 		
@@ -172,16 +175,24 @@ $(function () {
 		}
 	
 		//refresh count of todos to be completed.
-		function updateTodosRemaining() {
-			var remaining = 0;
+		function updateTodosLeft() {
+			var left = 0;
 			if (todos.length > 0) {
-				for (i = 0; i > todos.length; i++) {
-					if (todos[i]['completed'] === false) {
-						remaining++;
+				for (i = 0; i < todos.length; i++) {
+					if (todos[i]['completed'] == false) {
+						left++;
 					}
+					
 				}
 			}
-			$('#todos-remaining').text(remaining);
+			
+			if (left === 1) {
+				$('#plural').hide();
+			} else {
+				$('#plural').show();
+			}
+			
+			$('#todos-remaining').text(left);
 		}
 	
 		//add destroy function
