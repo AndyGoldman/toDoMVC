@@ -51,7 +51,7 @@ $(function () {
 		todos = JSON.parse(localStorage.getItem('todos'));
 		if (todos.length > 0) {
 			for (var i = 0; i <= todos.length - 1; i++) {
-				insertEntry(todos[i]['name'], todos[i]['id'], todos[i]['completed']);
+				insertEntry(todos[i]['entry'], todos[i]['id'], todos[i]['completed']);
 			};
 		}
 	}
@@ -59,7 +59,6 @@ $(function () {
 	function insertEntry(entry, id, status) {
 		$('.template li').clone().appendTo('#todo-list');
 		$('#todo-list li:last-child label').text(entry);
-		 console.log(entry);
 		$('#todo-list li:last-child').attr('data-id',id);
 		if (status) {
 			$('#todo-list li:last-child').addClass('completed');
@@ -125,6 +124,7 @@ $(function () {
 					addEditorListener();
 				}
 			});
+			
 			$("li[data-id *= '" + id + "']").click(function(event) {
 				if(event.target.nodeName === 'INPUT') {
 					var item = $(event.target).closest('li');
@@ -172,6 +172,17 @@ $(function () {
 		}
 	
 		//refresh count of todos to be completed.
+		function updateTodosRemaining() {
+			var remaining = 0;
+			if (todos.length > 0) {
+				for (i = 0; i > todos.length; i++) {
+					if (todos[i]['completed'] === false) {
+						remaining++;
+					}
+				}
+			}
+			$('#todos-remaining').text(remaining);
+		}
 	
 		//add destroy function
 	
