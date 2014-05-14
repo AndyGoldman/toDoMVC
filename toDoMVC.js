@@ -59,7 +59,7 @@ $(function () {
 	function insertEntry(entry, id, status) {
 		$('.template li').clone().appendTo('#todo-list');
 		$('#todo-list li:last-child label').text(entry);
-		 console.log($('#todo-list li:last-child label'));
+		 console.log(entry);
 		$('#todo-list li:last-child').attr('data-id',id);
 		if (status) {
 			$('#todo-list li:last-child').addClass('completed');

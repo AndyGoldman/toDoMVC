@@ -16,13 +16,16 @@
 					<h1>Do it!</h1>
 					<div id="border"></div>
 					<section id="toDoForm">
-						<div class="chevron"></div>
-						<div class="toDoEntry">
+						<span class="chevron">
+						<input id="toggle-all" type="checkbox">
+						<!--<label for='toggle-all'>Mark all as complete</label>-->
+						</span>
+						<span class="toDoEntry">
 							<input autofocus="" id = 'new-todo' placeholder="What do you want to do? ">
-						</div>
-						<label for='toggle-all'>Mark all as complete</label>
+						</span>
 					</section>
 				</header>
+			
 				<div id="inputHistory" class="input">
 					<div id="separator"></div>
 					<ul id="todo-list">
