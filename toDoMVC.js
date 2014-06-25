@@ -1,54 +1,100 @@
 $(function () {
+	
 	var todos = '';
+	var filter = 'all';
 	function standUp() {
-		//get entries from local storage if they exist.
-		//populate the list with entries and ids.
+		// get entries from local storage if they exist.
+		// populate the list with entries and ids.
 		
-		if (localStorage && localStorage.length > 0) {
+		if(localStorage && localStorage.length > 0) {
 			
-			//run populateList to insert all the entries
-			//populateList();
+			// run populateList to insert all the entries
+			// populateList();
 		} else {
 			var a = [];
-			localStorage.setItem('todos', JSON.stringify(a));
+			localStorage.setItem('todos',JSON.stringify(a));
 		}
 		
 		//setListeners after the list has been built.
+		populateList();
+		setFilter();
 		setListeners();
+		$('#filters a#' + filter).addClass('strong');
 	}
 	function setListeners() {
 		//listen for keypresses			
-		$('#new-todo').keyup(function (e) {
-		//check which key has been pressed.
+		$('#new-todo').keyup(function(e) {
+			// check which key has been pressed.
 			checkKeyPress(e);
 		});
+		
+		$('#toggle-all').on('click', function() {
+			// console.log($(this).is(':checked'));
+			toggleAllComplete();
+		})
+		
+		$('#filters a').on('click', function(e) {
+			filter = $(this).attr('id');
+			$('#filters a').removeClass('strong');
+			$(this).addClass('strong');
+			setFilter();
+		})
+	}	
+		
+	function setFilter() {
+		$('body').removeClass.addClass(filter);
 	}
-									
+	
 	function checkKeyPress(e) {
-	//if the key is the 'enter' key
+		// if the key is the 'enter' key
 		if (e.keycode === 13) {
-		//save the entry to local storage
+			//save the entry to local storage
 			saveEntry();
-		//if the key is the 'esc' key
-		} else if (e.keycode === 27) {
-			console.log('esc');
+		}
+	}
+	
+	function checkEditPress(e) {
+		if (e.keyCode === 13) {
+			updateEntry();
+		} else if (e.keyCode === 27) {
+			abortEditing();
 		}
 	}
 
-	//build the entire list based on the contents of local Storage
+	// build the entire list based on the contents of local Storage
 	function populateList() {
-		for (var i = localStorage.length - 1; i >= 0; i--) {
-			//localStorage[i]
-			console.log("There are entries in localStorage");
+		$('#todo-list)
+		var allCompleted = true;
+		todos = JSON.parse(localStorage.getItem('todos'));
+		if(todos.length > 0) {
+			for (var i = 0; i <= todos.length - 1; i++) {
+			// insert the todo into the html list
+			insertEntry(todos[i]['name'],todos[i]['id'],todos[i]['completed']);
+			if (todos[i]['completed'] === 'false') {
+				allCompleted = 'false';
+			}
 		};
+	}
+		
+		if (allCompleted === 'true') {
+			$('#toggle-all').prop('checked', true);
+		}
+		
+		update TodosLeft();
+		
+		
 	}
 	
 	function insertEntry() {
-		var entry = $('#new-todo').val();
-		$('.template li').clone().appendTo('#toDoList');
-		$('#toDoList li:last-child label').click().text(entry);
-		$('#toDoList li:last-child').attr('data-id',id);
+		$('.template li').clone().appendTo('#todo-list');
+		$('#todo-list li:last-child label').text(entry);
+		$('#todo-list li:last-child').attr('data-id',id);
+		if (status) {
+			$('#todo-list li:last-child').addClass('completed');
+			$('#todo-list li:last-child .toggle').attr('checked', true)
+		}
 		$('#new-todo').val('');
+		addListItemListener(id);
 	}	
 	
 	function uuid() {
@@ -68,10 +114,12 @@ $(function () {
 	}
 
 	function saveEntry(entry) {
+		var entry = $('#new-todo').val();
 		var id = uuid();
 		var toDoEntry = {
-			'id': id,
-			'entry': entry
+			'id':id,
+			'name':entry
+			'completed':false
 		};
 	
 		var a = [];
